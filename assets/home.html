@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Apollo</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>Apollo</h1>
+    </header>
+
+    <form method="post" action="/createEvent">
+      <input type="text" name="time" placeholder="time">
+      <select name="action">
+       <option value="open">Open</option>
+       <option value="close">Close</option>
+      </select>
+      <input type="submit" value="Add Event"/>
+    </form>
+
+    <table>
+      <tr>
+        <th>time</th>
+        <th>action</th>
+        <th> </th>
+      </tr>
+      {{ if .Events }}
+        {{ range .Events }}
+          <tr>
+            <td>{{ .Time }}</td>
+            <td>{{ .Action }}</td>
+            <td><a href="/deleteEvent?id={{.Id}}">Delete</a></td>
+          </tr>
+        {{ end }}
+      {{ end }}
+
+    </table>
+
+    <table>
+      <tr>
+        <th>action</th>
+        <th>duration</th>
+        <th>edit</th>
+      </tr>
+      {{ range .Durations }}
+        <tr>
+          <td>{{ .Action }}</td>
+          <td>{{ .Duration }}</td>
+          <td>
+            <form method="post" action="/updateDuration">
+              <input type="hidden" name="action" value={{ .Action }} />
+              <input type="number" name="duration" min="5" step="5" placeholder="30"> seconds
+              <input type="submit" value="Change"/>
+            </form>
+          </td>
+        </tr>
+      {{ end }}
+
+    </table>
+
+
+    <footer>
+    </footer>
+  </body>
+</html>
