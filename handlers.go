@@ -57,8 +57,10 @@ func createEvent(w http.ResponseWriter, r *http.Request) {
   event := Event{}
   event.Time = r.FormValue("time")
   event.Action = r.FormValue("action")
+  mountReadWrite()
   _, err := db.Exec("INSERT INTO events (time, action) VALUES (?, ?)", event.Time, event.Action)
   checkErr(err)
+  mountReadOnly()
   http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
@@ -70,8 +72,10 @@ func deleteEvent(w http.ResponseWriter, r *http.Request) {
   if id == "" {
     http.Error(w, "Please send ID", http.StatusBadRequest)
   }
+  mountReadWrite()
   _, err := db.Exec("DELETE FROM events WHERE id = ?", id)
   checkErr(err)
+  mountReadOnly()
   http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
@@ -82,7 +86,9 @@ func updateDuration(w http.ResponseWriter, r *http.Request) {
   dur := Duration{}
   dur.Action = r.FormValue("action")
   dur.Duration, _ = strconv.Atoi(r.FormValue("duration"))
+  mountReadWrite()
   _, err := db.Exec("UPDATE durations SET duration = ? WHERE action = ? ", dur.Duration, dur.Action)
   checkErr(err)
+  mountReadOnly()
   http.Redirect(w, r, "/", http.StatusSeeOther)
 }
