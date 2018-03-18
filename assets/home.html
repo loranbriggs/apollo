@@ -5,62 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Apollo</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-clockpicker.min.css">
     <link rel="stylesheet" type="text/css" href="css/apollo.css">
   </head>
 
   <body>
-    <header>
-      <h1>Apollo</h1>
-    </header>
+    <div class="containter">
+      <div class="row">
+        <div class="col">
+        <header>
+          <h1>Apollo</h1>
+          <h2 id="clock"></h2>
+        </header>
+        </div>
+      </div>
 
-    <form method="post" action="/createEvent">
-      <input type="text" name="time" placeholder="time">
-      <select name="action">
-       <option value="open">Open</option>
-       <option value="close">Close</option>
-      </select>
-      <input type="submit" value="Add Event"/>
-    </form>
+      <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+          <form method="post" action="/createEvent">
+            <div class="clockpicker" data-autoclose="true">
+              <input type="text" name="time" placeholder="time" value="17:30" required>
+            </div>
+            <select name="action">
+             <option value="open">Open</option>
+             <option value="close">Close</option>
+            </select>
+            <input type="submit" value="Add Event"/>
+          </form>
+        </div>
+      </div>
 
-    <table>
-      <tr>
-        <th>time</th>
-        <th>action</th>
-        <th> </th>
-      </tr>
-      {{ if .Events }}
-        {{ range .Events }}
-          <tr>
-            <td>{{ .Time }}</td>
-            <td>{{ .Action }}</td>
-            <td><a href="/deleteEvent?id={{.Id}}">Delete</a></td>
-          </tr>
-        {{ end }}
-      {{ end }}
+      <div class="row">
+        <div id="events" class="col-8">
+          <h3>Schedule</h3>
+          <table class="table table-striped">
+            <tr>
+              <th>Time</th>
+              <th>Action</th>
+              <th> </th>
+            </tr>
+            {{ if .Events }}
+              {{ range .Events }}
+                <tr>
+                  <td>{{ .Time }}</td>
+                  {{ if (eq .Action "open") }}
+                  <td class="table-success">{{ .Action }}</td>
+                  {{ else }}
+                  <td class="table-danger">{{ .Action }}</td>
+                  {{ end }}
+                  <td>
+                    <a class="delete" href="/deleteEvent?id={{.Id}}">
+                      Delete
+                    </a>
+                  </td>
+                </tr>
+              {{ end }}
+            {{ end }}
 
-    </table>
+          </table>
+        </div>
 
-    <table>
-      <tr>
-        <th>action</th>
-        <th>duration</th>
-        <th>edit</th>
-      </tr>
-      {{ range .Durations }}
-        <tr>
-          <td>{{ .Action }}</td>
-          <td>{{ .Duration }}</td>
-          <td>
-            <form method="post" action="/updateDuration">
-              <input type="hidden" name="action" value={{ .Action }} />
-              <input type="number" name="duration" min="5" step="5" placeholder="30"> seconds
-              <input type="submit" value="Change"/>
-            </form>
-          </td>
-        </tr>
-      {{ end }}
-
-    </table>
+        <div id="durations" class="col-4 border">
+          <h3> Durations </h3>
+          {{ range .Durations }}
+            <div>
+              <form class="durationform" method="post" action="/updateDuration">
+                <input type="hidden" name="action" value={{ .Action }} />
+                <label for="duration">{{ .Action }}</label>
+                <span class="durationMinus"> - </span>
+                <input type="number" name="duration" min="5" step="5" value="{{ .Duration }}" required>
+                <span class="durationPlus"> + </span>
+                <input type="submit" value="Save"/>
+              </form>
+            </div>
+          {{ end }}
+        </div>
+      </div>
+    </div>
 
 
     <footer>
@@ -68,5 +89,52 @@
     <script src="js/jquery-slim.min.js"</script>
     <script src="js/popper.min.js"</script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-clockpicker.min.js"></script>
+    <script type="text/javascript">
+      $('.clockpicker').clockpicker();
+    </script>
+    <script>
+      $(".durationMinus").on("click", function() {
+        var $button = $(this);
+        var $input = $button.next("input");
+        var oldValue = $input.val();
+        // Don't allow decrementing below zero
+        if (oldValue > 5) {
+          var newVal = parseFloat(oldValue) - 5;
+        } else {
+          newVal = 5;
+        }
+        $input.val(newVal);
+      });
+
+      $(".durationPlus").on("click", function() {
+        var $button = $(this);
+        var $input = $button.prev("input");
+        var oldValue = $input.val();
+        var newVal = parseFloat(oldValue) + 5;
+        $input.val(newVal);
+      });
+
+      function updateClock ( ) {
+        var currentTime = new Date ( );
+        var currentHours = currentTime.getHours ( );
+        var currentMinutes = currentTime.getMinutes ( );
+        var currentSeconds = currentTime.getSeconds ( );
+
+        // Pad the minutes and seconds with leading zeros, if required
+        currentHours = ( currentHours  < 10 ) ? "0" + currentHours : currentHours;
+        currentMinutes = ( currentMinutes  < 10 ) ? "0" + currentMinutes : currentMinutes;
+        currentSeconds = ( currentSeconds  < 10 ) ? "0" + currentSeconds : currentSeconds;
+
+        // Compose the string for display
+        var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds;
+                                    
+        $("#clock").html(currentTimeString);
+      }
+
+      $(document).ready(function() {
+         setInterval('updateClock()', 1000);
+      });
+    </script>
   </body>
 </html>

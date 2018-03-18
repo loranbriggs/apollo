@@ -1,0 +1,66 @@
+html {
+  overflow:hidden;
+}
+
+body {
+  margin: 10px;
+}
+
+header {
+  margin-bottom: 30px;
+}
+
+#clock {
+  position: fixed;
+  right: 3px;
+  top: 3px;
+  z-index: 1030;
+}
+
+input[type="text"] {
+  width: 75px;
+}
+
+input[type="number"] {
+  width: 45px;
+}
+
+select {
+  height: 30px;
+}
+
+.clockpicker {
+  display: inline-block;
+}
+
+h1 {
+  text-align: center;
+}
+
+#events {
+  margin-top:40px;
+}
+
+#durations {
+  position: fixed;
+  right: 3px;
+  bottom: 3px;
+  z-index: 1030;
+}
+
+.durationMinus {
+  color: red;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.durationPlus {
+  color: green;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.delete {
+  color: red;
+}
+

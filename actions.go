@@ -4,9 +4,9 @@ import (
 	"github.com/jasonlvhit/gocron"
 	"github.com/nathan-osman/go-rpigpio"
 	"log"
-	"os"
+	//"os"
 	"os/exec"
-	"syscall"
+	//"syscall"
 	"time"
 )
 
@@ -34,7 +34,7 @@ func scheduleActions(events []Event, durations []Duration) {
 }
 
 func open(s int) {
-	p, err := rpi.OpenPin(5, rpi.OUT)
+	p, err := rpi.OpenPin(13, rpi.OUT)
 	if err != nil {
 		panic(err)
 	}
@@ -45,7 +45,7 @@ func open(s int) {
 }
 
 func close(s int) {
-	p, err := rpi.OpenPin(12, rpi.OUT)
+	p, err := rpi.OpenPin(19, rpi.OUT)
 	if err != nil {
 		panic(err)
 	}
@@ -58,33 +58,33 @@ func close(s int) {
 func mountReadOnly() {
 	log.Println("Mounting Filesystem in READ-ONLY mode.")
 
-	binary, err := exec.LookPath("mount")
-	checkErr(err)
-
-	args := []string{"sudo", "mount", "-o", "remount,ro", "/"}
-	env := os.Environ()
-	err = syscall.Exec(binary, args, env)
-	checkErr(err)
-	log.Println("Filesystem mounted in READ-ONLY mode")
-
-	//cmd := exec.Command("/bin/sh", "-c", "/home/argos/scripts/mountfs/sh ro")
-	//_, err := cmd.Output()
+	//binary, err := exec.LookPath("mount")
 	//checkErr(err)
+
+	//args := []string{"sudo", "mount", "-o", "remount,ro", "/"}
+	//env := os.Environ()
+	//err = syscall.Exec(binary, args, env)
+	//checkErr(err)
+	//log.Println("Filesystem mounted in READ-ONLY mode")
+
+	cmd := exec.Command("bash", "/home/argos/scripts/mountfs.sh ro")
+	err := cmd.Run()
+	checkErr(err)
 }
 
 func mountReadWrite() {
 	log.Println("Mounting Filesystem in READ-WRITE mode.")
 
-	binary, err := exec.LookPath("mount")
-	checkErr(err)
-
-	args := []string{"sudo", "mount", "-o", "remount,rw", "/"}
-	env := os.Environ()
-	err = syscall.Exec(binary, args, env)
-	checkErr(err)
-	log.Println("Filesystem mounted in READ-WRITE mode")
-
-	//cmd := exec.Command("/bin/sh", "-c", "/home/argos/scripts/mountfs/sh rw")
-	//_, err := cmd.Output()
+	//binary, err := exec.LookPath("mount")
 	//checkErr(err)
+
+	//args := []string{"sudo", "mount", "-o", "remount,rw", "/"}
+	//env := os.Environ()
+	//err = syscall.Exec(binary, args, env)
+	//checkErr(err)
+	//log.Println("Filesystem mounted in READ-WRITE mode")
+
+  cmd := exec.Command("bash", "/home/argos/scripts/mountfs.sh rw")
+	err := cmd.Run()
+	checkErr(err)
 }

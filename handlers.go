@@ -61,7 +61,7 @@ func createEvent(w http.ResponseWriter, r *http.Request) {
 	_, err := db.Exec("INSERT INTO events (time, action) VALUES (?, ?)", event.Time, event.Action)
 	checkErr(err)
 	mountReadOnly()
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
 func deleteEvent(w http.ResponseWriter, r *http.Request) {
@@ -76,7 +76,7 @@ func deleteEvent(w http.ResponseWriter, r *http.Request) {
 	_, err := db.Exec("DELETE FROM events WHERE id = ?", id)
 	checkErr(err)
 	mountReadOnly()
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
 func updateDuration(w http.ResponseWriter, r *http.Request) {
@@ -90,5 +90,5 @@ func updateDuration(w http.ResponseWriter, r *http.Request) {
 	_, err := db.Exec("UPDATE durations SET duration = ? WHERE action = ? ", dur.Duration, dur.Action)
 	checkErr(err)
 	mountReadOnly()
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
