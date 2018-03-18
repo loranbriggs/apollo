@@ -12,11 +12,20 @@
   <body>
     <div class="containter">
       <div class="row">
-        <div class="col">
-        <header>
-          <h1>Apollo</h1>
-          <h2 id="clock"></h2>
-        </header>
+        <div class="col-2">
+          <img id="customer" src="img/customer.jpg" alt="Humboldt Light Dep LLC." height="150"/>
+        </div>
+        <div class="col-8">
+          <div id="branding">
+            <h1 class="product">Argos Apollo System</h1>
+            <h4 class="brand">by HBI&E</h4>
+          </div>
+        </div>
+        <div class="col-2">
+          <div id="menu">
+            <h2 id="clock"></h2>
+          </div>
+        </div>
         </div>
       </div>
 
@@ -24,19 +33,19 @@
         <div class="col-md-auto">
           <form method="post" action="/createEvent">
             <div class="clockpicker" data-autoclose="true">
-              <input type="text" name="time" placeholder="time" value="17:30" required>
+              <label><input type="text" name="time" placeholder="time" value="17:30" required></label>
             </div>
-            <select name="action">
-             <option value="open">Open</option>
-             <option value="close">Close</option>
-            </select>
-            <input type="submit" value="Add Event"/>
+            <label><select name="action">
+               <option value="open">Open</option>
+               <option value="close">Close</option>
+              </select></label>
+              <label><input type="submit" value="Add Event"/></label>
           </form>
         </div>
       </div>
 
       <div class="row">
-        <div id="events" class="col-8">
+        <div id="events" class="col-6">
           <h3>Schedule</h3>
           <table class="table table-striped">
             <tr>
@@ -65,7 +74,7 @@
           </table>
         </div>
 
-        <div id="durations" class="col-4 border">
+        <div id="durations" class="col-5 border">
           <h3> Durations </h3>
           {{ range .Durations }}
             <div>
@@ -134,6 +143,10 @@
 
       $(document).ready(function() {
          setInterval('updateClock()', 1000);
+      });
+
+      $("#shutdown").click(function() {
+        window.close()
       });
     </script>
   </body>

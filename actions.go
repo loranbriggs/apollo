@@ -5,7 +5,7 @@ import (
 	"github.com/nathan-osman/go-rpigpio"
 	"log"
 	//"os"
-	"os/exec"
+	//"os/exec"
 	//"syscall"
 	"time"
 )
@@ -67,9 +67,9 @@ func mountReadOnly() {
 	//checkErr(err)
 	//log.Println("Filesystem mounted in READ-ONLY mode")
 
-	cmd := exec.Command("bash", "/home/argos/scripts/mountfs.sh ro")
-	err := cmd.Run()
-	checkErr(err)
+	//cmd := exec.Command("bash", "/home/argos/scripts/mountfs.sh ro")
+	//err := cmd.Run()
+	//checkErr(err)
 }
 
 func mountReadWrite() {
@@ -84,7 +84,7 @@ func mountReadWrite() {
 	//checkErr(err)
 	//log.Println("Filesystem mounted in READ-WRITE mode")
 
-  cmd := exec.Command("bash", "/home/argos/scripts/mountfs.sh rw")
-	err := cmd.Run()
-	checkErr(err)
+	//cmd := exec.Command("bash", "/home/argos/scripts/mountfs.sh rw")
+	//err := cmd.Run()
+	//checkErr(err)
 }

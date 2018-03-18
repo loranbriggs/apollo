@@ -7,14 +7,24 @@ body {
 }
 
 header {
-  margin-bottom: 30px;
+  margin-bottom: 150px;
 }
 
-#clock {
-  position: fixed;
-  right: 3px;
-  top: 3px;
-  z-index: 1030;
+
+.product, .brand {
+  text-align: center;
+}
+
+.product, .brand {
+  display: inline-block;
+}
+
+input {
+  margin: 20px;
+}
+
+input[type="text"], select, input[type="submit"] {
+  height: 50px;
 }
 
 input[type="text"] {
@@ -22,23 +32,11 @@ input[type="text"] {
 }
 
 input[type="number"] {
-  width: 45px;
-}
-
-select {
-  height: 30px;
+  width: 70px;
 }
 
 .clockpicker {
   display: inline-block;
-}
-
-h1 {
-  text-align: center;
-}
-
-#events {
-  margin-top:40px;
 }
 
 #durations {
