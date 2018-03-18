@@ -11,8 +11,8 @@ header {
 }
 
 
-.product, .brand {
-  text-align: center;
+#branding {
+  text-align: right;
 }
 
 .product, .brand {
@@ -32,6 +32,7 @@ input[type="text"] {
 }
 
 input[type="number"] {
+  margin: 5px;
   width: 70px;
 }
 
