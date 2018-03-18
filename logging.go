@@ -1,11 +1,11 @@
 package main
 
 import (
-  "log"
+	"log"
 )
 
 func checkErr(err error) {
-  if (err != nil) {
-    log.Println(err)
-  }
+	if err != nil {
+		log.Println(err)
+	}
 }
