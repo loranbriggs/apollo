@@ -13,11 +13,12 @@
     <div class="containter">
       <div class="row">
         <div id="customer" class="col-2">
-          <img src="img/customer.jpg" alt="Humboldt Light Dep LLC." height="150"/>
+          <img src="img/customer.jpg" alt="Humboldt Light Dep LLC." height="80"/>
         </div>
         <div id="branding" class="col-7">
-          <h1 class="product">Argos Apollo System</h1>
-          <h4 class="brand">by HBI&E</h4>
+          <h1 id="product">Apollo Plus</h1>
+          <h6 id="product-detail">Greenhouse Automation</h6>
+          <h3 id="brand">by HBI&E</h3>
         </div>
         <div id="menu" class="col-2">
           <h2 id="clock"></h2>
@@ -27,15 +28,15 @@
 
       <div class="row justify-content-md-center">
         <div class="col-md-auto">
-          <form method="post" action="/createEvent">
+          <form id="newEventForm" method="post" action="/createEvent">
             <div class="clockpicker" data-autoclose="true">
               <label><input type="text" name="time" placeholder="time" value="17:30" required></label>
             </div>
             <label><select name="action">
                <option value="open">Open</option>
                <option value="close">Close</option>
-              </select></label>
-              <label><input type="submit" value="Add Event"/></label>
+            </select></label>
+            <label><input type="submit" value="Add Event"/></label>
           </form>
         </div>
       </div>
@@ -43,7 +44,7 @@
       <div class="row">
         <div id="events" class="col-6">
           <h3>Schedule</h3>
-          <table class="table table-striped">
+          <table class="table table-sm table-striped">
             <tr>
               <th>Time</th>
               <th>Action</th>
@@ -70,17 +71,17 @@
           </table>
         </div>
 
-        <div id="durations" class="col-5 border">
+        <div id="durations" class="col-4 border">
           <h3> Durations </h3>
           {{ range .Durations }}
             <div>
-              <form class="durationform" method="post" action="/updateDuration">
+              <form class="durationForm" method="post" action="/updateDuration">
                 <input type="hidden" name="action" value={{ .Action }} />
                 <label for="duration">{{ .Action }}</label>
-                <span class="durationMinus"> - </span>
+                <span class="durationButton durationMinus"> - </span>
                 <input type="number" name="duration" min="5" step="5" value="{{ .Duration }}" required>
-                <span class="durationPlus"> + </span>
-                <input type="submit" value="Save"/>
+                <span class="durationButton durationPlus"> + </span>
+                <label><input class="durationSubmit" type="submit" value="Save"/></label>
               </form>
             </div>
           {{ end }}
