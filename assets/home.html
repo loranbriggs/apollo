@@ -30,28 +30,18 @@
         </div>
       </div>
 
-      <div class="row justify-content-md-center">
-        <div class="col-md-auto">
-          <form id="newEventForm" method="post" action="/createEvent">
-            <div class="clockpicker" data-autoclose="true">
-              <label><input type="text" name="time" placeholder="time" value="17:30" required></label>
-            </div>
-            <label><select name="action">
-               <option value="open">Open</option>
-               <option value="close">Close</option>
-            </select></label>
-            <label><input type="submit" value="Add Event"/></label>
-          </form>
-        </div>
-      </div>
-
       <div class="row">
         <div id="events" class="col-6">
           <h3>Schedule</h3>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#createEventModal">
+            Add Event
+          </button>
           <table class="table table-sm table-striped">
             <tr>
               <th>Time</th>
               <th>Action</th>
+              <th>Duration (minutes)</th>
               <th> </th>
             </tr>
             {{ if .Events }}
@@ -63,8 +53,9 @@
                   {{ else }}
                   <td class="table-danger">{{ .Action }}</td>
                   {{ end }}
+                  <td>{{ .Minutes }}</td>
                   <td>
-                    <a class="delete" href="/deleteEvent?id={{.Id}}">
+                    <a class="btn btn-danger" href="/delete?id={{.Id}}">
                       Delete
                     </a>
                   </td>
@@ -73,22 +64,6 @@
             {{ end }}
 
           </table>
-        </div>
-
-        <div id="durations" class="col-4 border">
-          <h3> Durations </h3>
-          {{ range .Durations }}
-            <div>
-              <form class="durationForm" method="post" action="/updateDuration">
-                <input type="hidden" name="action" value={{ .Action }} />
-                <label for="duration">{{ .Action }}</label>
-                <span class="durationButton durationMinus"> - </span>
-                <input type="number" name="duration" min="5" step="5" value="{{ .Duration }}" required>
-                <span class="durationButton durationPlus"> + </span>
-                <label><input class="durationSubmit" type="submit" value="Save"/></label>
-              </form>
-            </div>
-          {{ end }}
         </div>
       </div>
     </div>
@@ -125,6 +100,39 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="createEventModal" tabindex="-1" role="dialog" aria-labelledby="createEventLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createEventLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="newEventForm" method="post" action="/create">
+              <div class="clockpicker" data-autoclose="true">
+                <label><input type="text" name="time" placeholder="time" value="17:30" required></label>
+              </div>
+              <label><select name="action">
+                 <option value="open">Open</option>
+                 <option value="close">Close</option>
+              </select></label>
+              <label><input type="number" name="minutes" placeholder="minutes" required></label>
+              <label><input type="submit" value="Add Event"/></label>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- #################  Javascript  ################ -->
 
     <script src="js/jquery-slim.min.js"</script>
@@ -134,6 +142,7 @@
     <script src="js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript">
       $('.clockpicker').clockpicker();
+      $('.datepicker').datepicker();
     </script>
     <script>
       $(".durationMinus").on("click", function() {
@@ -178,7 +187,6 @@
          setInterval('updateClock()', 1000);
       });
 
-      $('.datepicker').datepicker();
     </script>
   </body>
 </html>

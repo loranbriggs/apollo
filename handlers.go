@@ -15,37 +15,26 @@ func home(w http.ResponseWriter, r *http.Request) {
 	events := make([]Event, 0)
 	for rows.Next() {
 		event := Event{}
-		rows.Scan(&event.Id, &event.Time, &event.Action)
+		rows.Scan(&event.Id, &event.Time, &event.Action, &event.Minutes)
 		events = append(events, event)
 	}
 
-	rows, err = db.Query("SELECT * FROM durations")
-	checkErr(err)
-	durations := make([]Duration, 0)
-	for rows.Next() {
-		duration := Duration{}
-		rows.Scan(&duration.Action, &duration.Duration)
-		durations = append(durations, duration)
-	}
-
-	go scheduleActions(events, durations)
+	go scheduleActions(events)
 
 	a, err := Asset("assets/home.html")
 	checkErr(err)
 	t, _ := template.New("home").Parse(string(a))
 
 	data := struct {
-		Events    []Event
-		Durations []Duration
+		Events []Event
 	}{
 		events,
-		durations,
 	}
 
 	t.Execute(w, &data)
 }
 
-func createEvent(w http.ResponseWriter, r *http.Request) {
+func create(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	defer db.Close()
 
@@ -54,15 +43,17 @@ func createEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	event := Event{}
+  event := Event{}
+  var err error
 	event.Time = r.FormValue("time")
 	event.Action = r.FormValue("action")
-	_, err := db.Exec("INSERT INTO events (time, action) VALUES (?, ?)", event.Time, event.Action)
+  event.Minutes, err = strconv.Atoi(r.FormValue("minutes"))
+	_, err = db.Exec("INSERT INTO events (time, action, minutes) VALUES (?, ?, ?)", event.Time, event.Action, event.Minutes)
 	checkErr(err)
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
-func deleteEvent(w http.ResponseWriter, r *http.Request) {
+func delete(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	defer db.Close()
 
@@ -75,14 +66,10 @@ func deleteEvent(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
-func updateDuration(w http.ResponseWriter, r *http.Request) {
-	db := dbConn()
-	defer db.Close()
+func setClock(w http.ResponseWriter, r *http.Request) {
+  t := r.FormValue("time")
+  d := r.FormValue("date")
 
-	dur := Duration{}
-	dur.Action = r.FormValue("action")
-	dur.Duration, _ = strconv.Atoi(r.FormValue("duration"))
-	_, err := db.Exec("UPDATE durations SET duration = ? WHERE action = ? ", dur.Duration, dur.Action)
-	checkErr(err)
+  setDate(t, d)
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }

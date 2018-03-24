@@ -1,33 +1,23 @@
 package main
 
 import (
+  "fmt"
 	"github.com/jasonlvhit/gocron"
 	"github.com/nathan-osman/go-rpigpio"
 	"log"
-	//"os"
-	//"os/exec"
-	//"syscall"
+  "os/exec"
 	"time"
 )
 
-func scheduleActions(events []Event, durations []Duration) {
-	var openDur, closeDur int
-	for _, dur := range durations {
-		if dur.Action == "open" {
-			openDur = dur.Duration
-		} else if dur.Action == "close" {
-			closeDur = dur.Duration
-		}
-	}
-
+func scheduleActions(events []Event) {
 	gocron.Clear()
 	for _, event := range events {
 		if event.Action == "open" {
-			log.Println("opening at", event.Time, "for", openDur)
-			gocron.Every(1).Day().At(event.Time).Do(open, openDur)
+			log.Println("opening at", event.Time, "for", event.Minutes)
+			gocron.Every(1).Day().At(event.Time).Do(open, event.Minutes)
 		} else if event.Action == "close" {
-			log.Println("closing at", event.Time, "for", closeDur)
-			gocron.Every(1).Day().At(event.Time).Do(close, closeDur)
+			log.Println("closing at", event.Time, "for", event.Minutes)
+			gocron.Every(1).Day().At(event.Time).Do(close, event.Minutes)
 		}
 	}
 	<-gocron.Start()
@@ -39,7 +29,7 @@ func open(s int) {
 		panic(err)
 	}
 	p.Write(rpi.HIGH)
-	time.Sleep(time.Duration(s) * time.Second)
+	time.Sleep(time.Duration(s) * time.Minute)
 	p.Write(rpi.LOW)
 	p.Close()
 }
@@ -50,41 +40,17 @@ func close(s int) {
 		panic(err)
 	}
 	p.Write(rpi.HIGH)
-	time.Sleep(time.Duration(s) * time.Second)
+	time.Sleep(time.Duration(s) * time.Minute)
 	p.Write(rpi.LOW)
 	p.Close()
 }
 
-func mountReadOnly() {
-	log.Println("Mounting Filesystem in READ-ONLY mode.")
-
-	//binary, err := exec.LookPath("mount")
-	//checkErr(err)
-
-	//args := []string{"sudo", "mount", "-o", "remount,ro", "/"}
-	//env := os.Environ()
-	//err = syscall.Exec(binary, args, env)
-	//checkErr(err)
-	//log.Println("Filesystem mounted in READ-ONLY mode")
-
-	//cmd := exec.Command("bash", "/home/argos/scripts/mountfs.sh ro")
-	//err := cmd.Run()
-	//checkErr(err)
-}
-
-func mountReadWrite() {
-	log.Println("Mounting Filesystem in READ-WRITE mode.")
-
-	//binary, err := exec.LookPath("mount")
-	//checkErr(err)
-
-	//args := []string{"sudo", "mount", "-o", "remount,rw", "/"}
-	//env := os.Environ()
-	//err = syscall.Exec(binary, args, env)
-	//checkErr(err)
-	//log.Println("Filesystem mounted in READ-WRITE mode")
-
-	//cmd := exec.Command("bash", "/home/argos/scripts/mountfs.sh rw")
-	//err := cmd.Run()
-	//checkErr(err)
+func setDate(t string, d string) {
+  cmd := fmt.Sprintf("sudo date -s '%s %s'", d, t)
+  log.Println("executing: ", cmd)
+  out, err := exec.Command("/bin/bash", "-c", cmd).Output()
+  if err != nil {
+    checkErr(err)
+  }
+  log.Printf("%s", out)
 }

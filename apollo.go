@@ -19,10 +19,9 @@ func main() {
 	http.Handle("/", http.FileServer(assetFS()))
 
 	http.HandleFunc("/home", home)
-	http.HandleFunc("/createEvent", createEvent)
-	http.HandleFunc("/deleteEvent", deleteEvent)
-	http.HandleFunc("/updateDuration", updateDuration)
-	http.HandleFunc("/exit", exit)
+	http.HandleFunc("/create", create)
+	http.HandleFunc("/delete", delete)
+	http.HandleFunc("/setClock", setClock)
 	log.Println("listening at http://localhost" + port + "/home")
 	log.Fatal(server.ListenAndServe())
 }
