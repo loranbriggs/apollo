@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap-clockpicker.min.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" type="text/css" href="css/jqbtk.min.css">
     <link rel="stylesheet" type="text/css" href="css/apollo.css">
   </head>
 
@@ -120,7 +121,7 @@
                  <option value="open">Open</option>
                  <option value="close">Close</option>
               </select></label>
-              <label><input type="number" name="minutes" placeholder="minutes" required></label>
+              <label><input id="duration" type="number" name="minutes" placeholder="minutes" required></label>
               <label><input type="submit" value="Add Event"/></label>
             </form>
 
@@ -135,14 +136,16 @@
 
     <!-- #################  Javascript  ################ -->
 
-    <script src="js/jquery-slim.min.js"</script>
-    <script src="js/popper.min.js"</script>
+    <script src="js/jquery-slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-clockpicker.min.js"></script>
     <script src="js/bootstrap-datepicker.min.js"></script>
+    <script src="js/jqbtk.min.js"></script>
     <script type="text/javascript">
       $('.clockpicker').clockpicker();
       $('.datepicker').datepicker();
+      $('#duration').keyboard({type:'numpad'});
     </script>
     <script>
       $(".durationMinus").on("click", function() {
