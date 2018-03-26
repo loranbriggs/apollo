@@ -13,7 +13,7 @@
 
   <body>
     <div class="containter">
-      <div class="row">
+      <header class="row">
         <div id="customer" class="col-2">
           <img src="img/customer.jpg" alt="Humboldt Light Dep LLC." height="80"/>
         </div>
@@ -22,22 +22,27 @@
           <h6 id="product-detail">Greenhouse Automation</h6>
           <h3 id="brand">by HBI&E</h3>
         </div>
-        <div id="menu" class="col-2">
+        <div id="menu" class="col-3">
           <!-- Button trigger modal -->
           <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#clockModal">
             <h2 id="clock"></h2>
           </button>
         </div>
+      </header>
+
+      <div class="row justify-content-between">
+        <div class="col-3">
+          <h4>Schedule</h4>
+        </div>
+        <div class="col-3">
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createEventModal">
+            Create Event
+          </button>
         </div>
       </div>
-
       <div class="row">
-        <div id="events" class="col-6">
-          <h3>Schedule</h3>
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#createEventModal">
-            Add Event
-          </button>
+        <div class="col-12">
           <table class="table table-sm table-striped">
             <tr>
               <th>Time</th>
@@ -80,7 +85,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="clockModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="clockModalLabel">Set Time & Date</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -88,15 +93,15 @@
           <div class="modal-body">
             <form id="setClockForm" method="post" action="/setClock">
               <div class="clockpicker" data-autoclose="true" data-placement="right">
-                <label><input type="text" name="time" placeholder="time" required></label>
+                <input type="text" name="time" placeholder="time" required>
               </div>
-              <input class="datepicker" type="text" name="date" placeholder="date" data-date-format="dd M yyyy" required>
-              <label><input type="submit" value="Set"/></label>
+              <input id="datepicker" type="text" name="date" placeholder="date" data-date-format="dd M yyyy" required>
             </form>
+            <p>Set the system time & date. <strong>Note</strong> if you have an internet connection the this is done automatically.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Set</button>
+            <input type="submit" form="setClockForm" class="btn btn-primary" value="Set"/>
           </div>
         </div>
       </div>
@@ -107,7 +112,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="createEventLabel">Modal title</h5>
+            <h5 class="modal-title" id="createEventLabel">Create Event</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -115,20 +120,24 @@
           <div class="modal-body">
             <form id="newEventForm" method="post" action="/create">
               <div class="clockpicker" data-autoclose="true">
-                <label><input type="text" name="time" placeholder="time" value="17:30" required></label>
+                <input type="text" name="time" placeholder="time" required>
               </div>
-              <label><select name="action">
-                 <option value="open">Open</option>
-                 <option value="close">Close</option>
-              </select></label>
-              <label><input id="duration" type="number" name="minutes" placeholder="minutes" required></label>
-              <label><input type="submit" value="Add Event"/></label>
+                <div class="dropdown">
+                  <input id="action" type="text" name="action" placeholder="action" required>
+                  <div class="options hidden">
+                    <div class="option" data-action="open">Open</div>
+                    <div class="option" data-action="close">Close</div>
+                  </div>
+                </div>
+              </select>
+              <input id="duration" type="number" name="minutes" placeholder="mins" required>
             </form>
+            <p>Create a new event- set the start time, action, and duration in minutes.</p>
 
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Create</button>
+            <input type="submit" form="newEventForm" class="btn btn-primary" value="Create"/>
           </div>
         </div>
       </div>
@@ -144,10 +153,28 @@
     <script src="js/jqbtk.min.js"></script>
     <script type="text/javascript">
       $('.clockpicker').clockpicker();
-      $('.datepicker').datepicker();
+      $('#datepicker').datepicker();
       $('#duration').keyboard({type:'numpad'});
     </script>
     <script>
+
+      $(document).mouseup(function(e) {
+        var options = $(".options");
+        if (!options.is(e.target) && options.has(e.target).length ===0) {
+          options.addClass("hidden");
+        }
+      });
+
+      $("#action").on("click", function() {
+        var $input = $(this);
+        $(".options").removeClass("hidden");
+        $(".option").on("click", function() {
+          var $option = $(this);
+          $input.val($option.attr("data-action"));
+          $(".options").addClass("hidden");
+        });
+      });
+
       $(".durationMinus").on("click", function() {
         var $button = $(this);
         var $input = $button.next("input");
