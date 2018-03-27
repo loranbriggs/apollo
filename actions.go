@@ -24,7 +24,7 @@ func scheduleActions(events []Event) {
 }
 
 func open(s int) {
-	p, err := rpi.OpenPin(13, rpi.OUT)
+	p, err := rpi.OpenPin(5, rpi.OUT)
 	if err != nil {
 		panic(err)
 	}
@@ -35,7 +35,7 @@ func open(s int) {
 }
 
 func close(s int) {
-	p, err := rpi.OpenPin(19, rpi.OUT)
+	p, err := rpi.OpenPin(12, rpi.OUT)
 	if err != nil {
 		panic(err)
 	}
