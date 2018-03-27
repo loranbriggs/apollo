@@ -1,0 +1,12 @@
+[Unit]
+Description=Automated Green House Service
+
+[Service]
+User=argos
+WorkingDirectory=/home/argos
+ExecStart=/home/argos/apollo
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
