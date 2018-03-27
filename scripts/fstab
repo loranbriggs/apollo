@@ -2,8 +2,8 @@
 #
 # <file system>		<mount point>	<type>	<options>	<dump>	<pass> 
 proc            	/proc           proc    defaults        0       0
-PARTUUID=a8fe70f4-01  	/boot           vfat    ro		0       2
-PARTUUID=a8fe70f4-02  	/               ext4    ro		0       1
+/dev/mmcblk0p1  	/boot           vfat    ro		0       2
+/dev/mmcblk0p2  	/               ext4    ro		0       1
 /dev/mmcblk0p3		/home		ext4	rw		0	2
 # a swapfile is not a swap partition, no line here
 #   use  dphys-swapfile swap[on|off]  for that
