@@ -24,6 +24,7 @@ func scheduleActions(events []Event) {
 }
 
 func open(s int) {
+  log.Println("opening!")
 	p, err := rpi.OpenPin(5, rpi.OUT)
 	if err != nil {
 		panic(err)
@@ -35,6 +36,7 @@ func open(s int) {
 }
 
 func close(s int) {
+  log.Println("closing!")
 	p, err := rpi.OpenPin(12, rpi.OUT)
 	if err != nil {
 		panic(err)
