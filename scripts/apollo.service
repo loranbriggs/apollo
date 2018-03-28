@@ -2,7 +2,8 @@
 Description=Automated Green House Service
 
 [Service]
-User=argos
+User=root
+Group=root
 WorkingDirectory=/home/argos
 ExecStart=/home/argos/apollo
 Restart=on-failure
