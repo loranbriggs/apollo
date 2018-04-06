@@ -28,26 +28,26 @@ func scheduleActions(events []Event) {
 
 func open(mins int) {
   log.Printf("OPENING: Starting to open for %d minutes.", mins)
-	p, err := rpi.OpenPin(5, rpi.OUT)
+	p, err := rpi.OpenPin(20, rpi.OUT)
 	if err != nil {
 		panic(err)
 	}
-	p.Write(rpi.HIGH)
-	time.Sleep(time.Duration(mins) * time.Minute)
 	p.Write(rpi.LOW)
+	time.Sleep(time.Duration(mins) * time.Minute)
+	p.Write(rpi.HIGH)
 	p.Close()
   log.Println("OPENING: Finished")
 }
 
 func close(mins int) {
   log.Printf("CLOSING: Starting to close for %d minutes.", mins)
-	p, err := rpi.OpenPin(12, rpi.OUT)
+	p, err := rpi.OpenPin(21, rpi.OUT)
 	if err != nil {
 		panic(err)
 	}
-	p.Write(rpi.HIGH)
-	time.Sleep(time.Duration(mins) * time.Minute)
 	p.Write(rpi.LOW)
+	time.Sleep(time.Duration(mins) * time.Minute)
+	p.Write(rpi.HIGH)
 	p.Close()
   log.Println("CLOSING: Finished")
 }
