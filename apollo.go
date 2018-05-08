@@ -5,6 +5,7 @@ package main
 import (
 	"log"
 	"net/http"
+  "os"
 )
 
 var (
@@ -14,6 +15,7 @@ var (
 
 func main() {
 	server = &http.Server{Addr: port}
+  hs, _ := os.Hostname()
 
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	http.Handle("/", http.FileServer(assetFS()))
@@ -23,6 +25,7 @@ func main() {
 	http.HandleFunc("/delete", delete)
 	http.HandleFunc("/setClock", setClock)
 	log.Println("listening at http://localhost" + port + "/home")
+	log.Println("listening at http://" + hs + port + "/home")
 	log.Fatal(server.ListenAndServe())
 }
 
