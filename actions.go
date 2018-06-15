@@ -2,7 +2,7 @@ package main
 
 import (
   "fmt"
-	"github.com/jasonlvhit/gocron"
+	"github.com/gljubojevic/gocron"
 	"github.com/nathan-osman/go-rpigpio"
 	"log"
   "os/exec"
